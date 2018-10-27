@@ -1,28 +1,27 @@
-// Include libraries to support ESP8266 serial communication with arduino IDE:
-
+// Include ESP8266 serial communication library for Arduino interfacing
 #include <SoftwareSerial.h>
-SoftwareSerial esp8266(2, 3); 
-void setup() { 
-// Begin serial communication with baud rate of 115200:
-Serial.begin(115200);
+SoftwareSerial ESPserial(2, 3); // RX | TX
 
-
-while (!Serial) {
-; // For native USB port support only, serial port is connected:
-} 
-Serial.println("Started"); 
-
-//Set data baud rate for the SoftwareSerial port too:
-esp8266.begin(115200); 
-esp8266.write("AT\r\n"); 
-} 
-void loop() 
-{ 
-if (esp8266.available()) 
+// Assign the required  Baud rate:
+void setup() 
 {
-Serial.write(esp8266.read()); 
-} 
-if (Serial.available()) {
-esp8266.write(Serial.read()); 
-} 
+  Serial.begin(9600);
+  ESPserial.begin(115200);
+  ESPserial.println("AT+IPR=9600");
+  delay(1000);
+  ESPserial.end();
+  // Begin software serial for communication with the ESP8266:
+  ESPserial.begin(9600);
+
+  Serial.println("Ready");
+  ESPserial.println("AT+GMR");
+}
+
+void loop() 
+{
+    //Detect serial communication and copy it to the serial monitor:
+    if ( ESPserial.available() )   {  Serial.write( ESPserial.read() );  }
+
+   // Find input from user and relay it to ESP 8266:
+    if ( Serial.available() )       {  ESPserial.write( Serial.read() );  }
 }
