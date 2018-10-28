@@ -18,4 +18,20 @@ void loop(){
      Serial.println(flexValue); 
      //Print the senaor values obtained from flex sensor
      
-} //Terminate the code
+} 
+
+int IRValues;
+int flexValue;
+void setup(){
+  Serial.begin(9600);
+  
+}
+void loop(){
+  IRValue=analogRead(A0);
+if(IRValue<600)
+  Serial.println(IRValue);
+  flexValue=analogRead(A1);
+if(flexValue<40)
+  Serial.println(flexValue);
+ 
+}//Terminate the code
